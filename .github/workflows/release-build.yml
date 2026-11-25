@@ -1,0 +1,44 @@
+name: Release build
+
+# Signed release build. The upstream release.yml only publishes a signed APK
+# already pushed to the `dist` branch — it does not build or sign anything.
+# This workflow builds + signs the release APK from main on demand.
+# Signing: KEYSTORE.JKS is decoded from the KEYSTORE_JKS_BASE64 repo secret
+# into $GITHUB_WORKSPACE (where app/build.gradle expects it), with
+# KEYSTORE_PASSWORD / KEY_ALIAS / KEY_PASSWORD from repo secrets.
+# No keystore or password is committed to the repo.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: SDK packages
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null || true
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-34" "build-tools;34.0.0" "ndk;27.2.12479018" "cmake;3.22.1" > /dev/null || true
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_JKS_BASE64 }}" | base64 -d > "$GITHUB_WORKSPACE/KEYSTORE.JKS"
+          ls -l "$GITHUB_WORKSPACE/KEYSTORE.JKS"
+      - run: python3 tools/gen_found_index.py
+      - name: Build signed release
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: chmod +x gradlew && ./gradlew --no-daemon assembleRelease
+      - uses: actions/upload-artifact@v4
+        with:
+          name: identra-release-${{ github.run_number }}
+          path: app/build/outputs/apk/release/*.apk
