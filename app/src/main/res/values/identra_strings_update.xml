@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_check_update">Check for updates</string>
+    <string name="menu_auto_update">Auto-check updates</string>
+    <string name="update_checking">Checking for updates…</string>
+    <string name="update_latest">Identra %1$s is the latest version</string>
+    <string name="update_available">Update available: %1$s</string>
+    <string name="update_current">Installed: %1$s</string>
+    <string name="update_install">Update now</string>
+    <string name="update_skip">Skip this version</string>
+    <string name="update_downloading">Downloading update…</string>
+    <string name="update_failed">Update failed: %1$s</string>
+    <string name="update_installing">Installing…</string>
+    <string name="update_changelog">What\'s new:</string>
+    <string name="update_later">Later</string>
+    <string name="identra_picker_search">Search apps</string>
+    <string name="identra_picker_show_system">Show system apps</string>
+    <string name="identra_picker_keyboard">Keyboard</string>
+    <string name="identra_picker_system">System</string>
+    <plurals name="identra_picker_selected">
+        <item quantity="one">%d selected</item>
+        <item quantity="other">%d selected</item>
+    </plurals>
+    <string name="identra_instances_keyboard_sub">Keyboard for typing inside this instance</string>
+    <string name="identra_dash_fw_ok">● LSPosed / Vector connected</string>
+    <string name="identra_dash_fw_off">● LSPosed / Vector not connected</string>
+    <string name="identra_dash_root_ok">● Root access granted</string>
+    <string name="identra_dash_root_missing">● Root permission missing</string>
+    <string name="identra_dash_root_missing_body">Root permission is missing, so some features won\'t work: instances, app data per profile, clear data and one-tap updates. Grant root to Identra in Magisk / KernelSU / APatch.</string>
+</resources>
